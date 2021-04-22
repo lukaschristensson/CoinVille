@@ -33,7 +33,8 @@ class BuyableAutoclicker extends AutoClicker{
 	constructor(freq, name, price, priceFunc, sketch){
 		super(freq, name);
 		this.sketch = sketch
-		this.amount = sketch.getItem(name);
+        if (sketch != null)
+		    this.amount = sketch.getItem(name);
 		this.price = price;
 		this.priceFunc = priceFunc;
 		if (this.amount)
@@ -52,7 +53,8 @@ class BuyableAutoclicker extends AutoClicker{
 
 		if (mm.value >= finalPrice) {
 			this.addAC(amount);
-			this.sketch.storeItem(this.name, this.amount);
+            if (this.sketch != null)
+			    this.sketch.storeItem(this.name, this.amount);
 			mm.value -= finalPrice;
 			this.price = dummy_price;
 			return true;

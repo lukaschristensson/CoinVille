@@ -6,7 +6,8 @@ class MoneyMaker{
 		this.color = 'green';
 		this.token = '€';
 		this.position = pos;
-		setInterval(() => sketch.storeItem('coins', this.value), 1000);
+        if (sketch != null)
+		    setInterval(() => sketch.storeItem('coins', this.value), 1000);
 	}
 
 	setSize(size){

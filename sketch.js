@@ -3,23 +3,33 @@ let mm = null;
 let store = null;
 let coinSize = [200, 200];
 let storeSize = [300, 600];
-
+let storage = false;
 
 const mainS = ( mainSketch ) => {
     mainSketch.mc = null;
-
+    //random comment! :)
     mainSketch.setup = () => {
+
+        if (!storageAvailable(mainSketch, String)){
+            alert('You don\'t have local storage enabled in your browser, activate it to save your progress inbetween sessions!')
+        } else storage = true;
+
         mainSketch.frameRate(30);
         //var c = createCanvas(windowWidth-4, windowHeight-4);
         var c = mainSketch.createCanvas(700, 500);
         c.parent('gameCanvas');
         mainSketch.mc = new MainCoin([coinSize[0]/2+70, mainSketch.height/2], coinSize);
         mainSketch.mc.setIdleAnimation(new DefaultIdleAni(1/20));
-        mm = new MoneyMaker(mainSketch);
+        if (storage)
+            mm = new MoneyMaker(mainSketch);
+        else
+            mm = new MoneyMaker(null);
         mm.setSize([mainSketch.width*0.8, 100]);
         mm.setPos([mainSketch.width*0.1, 10]);
-        initCoins = mainSketch.getItem('coins');
-        mm.setValue(initCoins?initCoins:0);
+        if (storage){
+            initCoins = mainSketch.getItem('coins');
+            mm.setValue(initCoins?initCoins:0);
+        } else mm.setValue(0);
     }
 
     mainSketch.draw = () => {
@@ -37,14 +47,20 @@ new p5(mainS);
 const storeS = ( storeSketch ) => {
     storeSketch.setup = () => {
         store = new Store([0, 0]);
-        for (let i = 0; i < 1; i++){
+        if (storage){
             store.addItem(new MoneyMoo(storeSketch));
             store.addItem(new PennyPython(storeSketch));
             store.addItem(new NetworthSpider(storeSketch));
             store.addItem(new HedgeFundHog(storeSketch));
             store.addItem(new PortfolioPenguin(storeSketch));
+        } else {
+            store.addItem(new MoneyMoo(null));
+            store.addItem(new PennyPython(null));
+            store.addItem(new NetworthSpider(null));
+            store.addItem(new HedgeFundHog(null));
+            store.addItem(new PortfolioPenguin(null));
         }
-        store.setSize([282, Math.max(store.items.length*53 + 3, 430)]);
+        store.setSize([300, Math.max(store.items.length*53 + 3, 430)]);
 		let c = storeSketch.createCanvas(300,Math.max(store.items.length*53 + 3, 430));
 		c.parent('storeCanvas');
 		storeSketch.background(200);
@@ -74,3 +90,16 @@ const storeHeader = ( storeHeader ) => {
 	}
 };
 new p5(storeHeader);
+
+function storageAvailable(s, type) {
+    var storage;
+    try {
+        var x = '__storage_test__';
+        s.storeItem(x, x);
+        s.getItem(x);
+        return true;
+    }
+    catch(e) {
+        return false;
+    }
+}
