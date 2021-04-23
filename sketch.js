@@ -91,6 +91,11 @@ const storeHeader = ( storeHeader ) => {
 };
 new p5(storeHeader);
 
+function reset(){
+    mm.setValue(0);
+    store.items.forEach((e) => e.reset());
+}
+
 function storageAvailable(s, type) {
     var storage;
     try {

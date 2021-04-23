@@ -23,6 +23,9 @@ class AutoClicker extends Author{
 			return 1;
 		});
 	}
+	reset(){
+		this.amount = 0;
+	}
 	addAC(amount){
 		this.amount += amount;
 	}
@@ -36,12 +39,17 @@ class BuyableAutoclicker extends AutoClicker{
         if (sketch != null)
 		    this.amount = sketch.getItem(name);
 		this.price = price;
+		this.basePrice = price;
 		this.priceFunc = priceFunc;
 		if (this.amount)
 			for (let i = 0; i < this.amount; i++) this.price = this.priceFunc(this.price);
 		else
 			this.amount = 0;
 
+	}
+	reset(){
+		this.amount = 0;
+		this.price = this.basePrice;
 	}
 	buy(amount){
 		let finalPrice = 0;
